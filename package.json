@@ -4,14 +4,14 @@
   "description": "Decimal number utilities",
   "keywords": [
     "decimal",
-    "number"
+    "number",
+    "maths"
   ],
   "author": "Levente Bagi",
   "license": "MIT",
   "homepage": "https://github.com/bagilevi/bs-decimal",
-  "bugs": {
-    "url" : "https://github.com/bagilevi/bs-decimal/issues"
-  },
+  "repository": "https://github.com/bagilevi/bs-decimal",
+  "bugs": "https://github.com/bagilevi/bs-decimal/issues",
   "main": "lib/js/src/Decimal.js",
   "scripts": {
     "build": "bsb -make-world",

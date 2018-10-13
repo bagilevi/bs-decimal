@@ -1,6 +1,9 @@
 # bs-decimal
 
-Decimal number functions for ReasonML.
+Decimal number functions for ReasonML - experimental stage
+
+Decimals are represented as a tuple of mantissa and exponent, both `int`.
+It supports basic mathematical operations and conversion to and from string.
 
 ## Installation
 
