@@ -1,0 +1,20 @@
+{
+  "name": "bs-decimal",
+  "bsc-flags": ["-bs-no-version-header", "-bs-super-errors"],
+  "refmt": 3,
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    },
+    {
+      "dir": "test",
+      "type": "dev",
+      "subdirs": true
+    },
+  ],
+  "bs-dev-dependencies": [
+    "bs-mocha",
+    "bs-chai"
+  ],
+}

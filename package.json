@@ -1,0 +1,28 @@
+{
+  "name": "bs-decimal",
+  "version": "0.0.1",
+  "description": "Decimal number utilities",
+  "keywords": [
+    "decimal",
+    "number"
+  ],
+  "author": "Levente Bagi",
+  "license": "MIT",
+  "homepage": "https://github.com/bagilevi/bs-decimal",
+  "bugs": {
+    "url" : "https://github.com/bagilevi/bs-decimal/issues"
+  },
+  "main": "lib/js/src/Decimal.js",
+  "scripts": {
+    "build": "bsb -make-world",
+    "watch": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "mocha lib/js/test/*_test.js",
+    "test:watch": "mocha -w lib/js/test/*.js"
+  },
+  "devDependencies": {
+    "bs-chai": "^0.4.0",
+    "bs-mocha": "^0.4.0",
+    "bs-platform": "^4.0.6"
+  }
+}
