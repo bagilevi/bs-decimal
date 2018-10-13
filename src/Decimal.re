@@ -9,7 +9,6 @@ type precision_preference =
   | Unspecified
 
 exception StringNotDecimal
-exception InternalError(string)
 
 let decimal_of_int = (x: int) =>
   Decimal(x, 0)
@@ -21,49 +20,66 @@ let pow10 = (exp: int) => {
   }
   tmp^
 }
+type parse_state =
+  | Start
+  | Integral
+  | Fractional
 
 let decimal_of_string = (s: string) => {
-  let parse_string = (s: string): option((int, string, string)) => {
-    switch (Js.Re.fromString("^(-|\\+)?(\\d+)(\\.(\\d+))?$") |> Js.Re.exec(s)) {
-      | Some(result) => {
-        let captures = Js.Re.captures(result)
-        let sign_match = Js.Nullable.toOption(captures[1])
-        let int_match  = Js.Nullable.toOption(captures[2])
-        let frac_match = Js.Nullable.toOption(captures[4])
+  let sign = ref(1);
+  let state = ref(Start);
+  let mantissa = ref(0);
+  let exponent = ref(0);
 
-        let sign = switch (sign_match) {
-          | Some("-") => -1
-          | Some("+") => 1
-          | Some(x) => raise(InternalError("invalid sign: " ++ x))
-          | None => 1
-        };
-        let integer_str = switch (int_match) {
-          | Some(x) => x
-          | None => raise(InternalError("no integer part"))
-        };
-        let frac_str = switch (frac_match) {
-          | Some(x) => x
-          | None => ""
-        };
-        let t = (sign, integer_str, frac_str)
-        Some(t)
-      }
-      | None => None
+  let process_digit = (digit) => {
+    mantissa := mantissa^ * 10 + digit;
+    if (state^ == Fractional) {
+      exponent := exponent^ - 1;
+    }
+    if (state^ == Start) {
+      state := Integral;
     }
   }
 
-  switch (parse_string(s)) {
-    | Some((sign, int_str, frac_str)) => {
-      let exponent = - frac_str->String.length
-      let frac_part = (exponent == 0) ? 0 : int_of_string(frac_str)
-
-      let base = int_of_string(int_str) * pow10(- exponent)
-      let mantissa = sign * (base + frac_part)
-
-      Decimal(mantissa, exponent)
+  let process_negation = () => {
+    if (state^ == Start) {
+      sign := -1
+      state := Integral;
     }
-    | None => raise(StringNotDecimal)
+    else {
+      raise(StringNotDecimal);
+    }
   }
+
+  let process_point = () => {
+    if (state^ == Fractional) {
+      raise(StringNotDecimal);
+    } else {
+      state := Fractional;
+    }
+  }
+
+  for (i in 0 to String.length(s) - 1) {
+    let c = s.[i];
+
+    switch (c) {
+      | '0' => process_digit(0)
+      | '1' => process_digit(1)
+      | '2' => process_digit(2)
+      | '3' => process_digit(3)
+      | '4' => process_digit(4)
+      | '5' => process_digit(5)
+      | '6' => process_digit(6)
+      | '7' => process_digit(7)
+      | '8' => process_digit(8)
+      | '9' => process_digit(9)
+      | '-' => process_negation()
+      | '.' => process_point()
+      | _ => raise(StringNotDecimal)
+    }
+  }
+
+  Decimal(sign^ * mantissa^, exponent^)
 }
 
 let dec = decimal_of_string;

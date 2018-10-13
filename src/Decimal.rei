@@ -1,5 +1,5 @@
 type decimal = | Decimal(int, int);
-
+exception StringNotDecimal;
 
 let decimal_of_int: int => decimal;
 let decimal_of_string: string => decimal;
