@@ -1,6 +1,6 @@
 {
   "name": "bs-decimal",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Decimal number utilities",
   "keywords": [
     "decimal",
